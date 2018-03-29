@@ -1,21 +1,27 @@
-const TeleBot = require('telebot');
-const bot = new TeleBot('578626845:AAFtcGL769RWinqfrxSe93vJSB2QFN9gx7E');
+const TelegramBot = require('node-telegram-bot-api');
 
-// При /start
-bot.on(['/start', '/hello'], (msg) => msg.reply.text('Welcome!'));
-// При тексте
-// bot.on('text', (msg) => msg.reply.text(msg.text));
-// При стикере
-bot.on('sticker', (msg) => {
-	return msg.reply.sticker('http://i.imgur.com/VRYdhuD.png', { asReply: true });
-});
-// При кастомной команде
-bot.on('/hi', (msg) => {
-  return bot.sendMessage(msg.from.id, `Hello, ${ msg.from.first_name }!`);
-});
-bot.on('/remember', (msg) => {
-	let date = msg.text;
-	return date
-});
+// replace the value below with the Telegram token you receive from @BotFather
+const token = '578626845:AAFtcGL769RWinqfrxSe93vJSB2QFN9gx7E';
+// Create a bot that uses 'polling' to fetch new updates
+const bot = new TelegramBot(token, { polling: true });
 
-bot.start();
+var BDs = [];
+
+// bot.onText(/\/test/, msg => {
+// 	const userId = msg.from.id;
+// 	bot.sendMessage(userId, userId)
+// })
+
+bot.onText(/\/addBD of (.+) on (.+)/, msg => {
+	const userId = msg.from.id;
+	var name = match[1];
+	var date = match[2];
+
+	BDs.push( { 'uid':userId, 'name':name, 'date':date } );
+
+	bot.sendMessage(userId, BDs);
+})
+
+// bot.on('polling_error', (error) => {
+//   console.log(error.code);  // => 'EFATAL'
+// });
